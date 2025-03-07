@@ -43,8 +43,14 @@ def pre_process(data_path):
 
 
 def last_process(file_name):
+    major_version = int(cv2.__version__.split('.')[0])
+
     image = cv2.imread(f'./tmp/image/{file_name}.png')
     mask = cv2.imread(f'./tmp/mask/{file_name}_mask.png', 0)
-    thresh, contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if major_version < 4: # OpenCV 2.x 和 3.x 版本
+        thresh, contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    else:  # OpenCV 4.x 和 5.x 版本
+        contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # thresh, contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     draw = cv2.drawContours(image, contours, -1, (0, 255, 0), 2)
     cv2.imwrite(f'./tmp/draw/{file_name}.png', draw)

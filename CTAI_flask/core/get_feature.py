@@ -113,7 +113,8 @@ def get_glcm_features(mat):
 
 def get_geometry_feature():
     # 形态特征  分割mask获得一些特征
-    im2, contours, x = cv2.findContours(mask_array.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    # im2, contours, x = cv2.findContours(mask_array.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    contours, x = cv2.findContours(mask_array.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)  # cv版本4.x
     tarea = []
     tperimeter = []
     for c in contours:

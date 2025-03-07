@@ -362,7 +362,7 @@
             };
         },
         created: function () {
-            document.title = '肿瘤辅助诊断系统';
+            document.title = '医学图像分割断系统';
         },
         methods: {
             true_upload() {

@@ -10,6 +10,9 @@ from flask import *
 import core.main
 import core.net.unet as net
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
 UPLOAD_FOLDER = r'./uploads'
 
 ALLOWED_EXTENSIONS = set(['dcm'])
@@ -48,7 +51,8 @@ def upload_file():
     file = request.files['file']
     print(datetime.datetime.now(), file.filename)
     if file and allowed_file(file.filename):
-        src_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        # src_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        src_path = os.path.join('D:\CTAI\CTAI_flask\IMG', file.filename)
         file.save(src_path)
         shutil.copy(src_path, './tmp/ct')
         image_path = os.path.join('./tmp/ct', file.filename)
@@ -59,7 +63,6 @@ def upload_file():
                         'draw_url': 'http://127.0.0.1:5003/tmp/draw/' + pid,
                       'image_info': image_info
                        })
-
 
     return jsonify({'status': 0})
 
@@ -90,9 +93,11 @@ def init_model():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = net.Unet(1, 1).to(device)
     if torch.cuda.is_available():
-        model.load_state_dict(torch.load("./core/net/model.pth"))
+        # model.load_state_dict(torch.load("./core/net/model.pth"))
+        model.load_state_dict(torch.load(r"D:\CTAI\CTAI_flask\core\net\model.pth"))
     else:
-        model.load_state_dict(torch.load("./core/net/model.pth", map_location='cpu'))
+        # model.load_state_dict(torch.load("./core/net/model.pth", map_location='cpu'))
+        model.load_state_dict(torch.load(r"D:\CTAI\CTAI_flask\core\net\model.pth", map_location='cpu'))
     model.eval()
     return model
 

@@ -1,3 +1,6 @@
 /CTAI_web/node_modules/
 /.idea/
 /CTAI_web/dist.zip
+**/__pycache__
+*.dcm
+*.png
