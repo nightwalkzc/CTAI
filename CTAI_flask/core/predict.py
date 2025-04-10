@@ -24,11 +24,11 @@ def predict(dataset,model):
     with torch.no_grad():
         x = dataset[0][0].to(device)
         file_name = dataset[1]
-        y = model(x)
-        img_y = torch.squeeze(y).cpu().numpy()
+        y = model(x) # 模型预测
+        img_y = torch.squeeze(y).cpu().numpy() # 预测结果降维并转为np.array
         img_y[img_y >= rate] = 1
         img_y[img_y < rate] = 0
-        img_y = img_y * 255
+        img_y = img_y * 255  # 二值化
         cv2.imwrite(f'./tmp/mask/{file_name}_mask.png', img_y,
                     (cv2.IMWRITE_PNG_COMPRESSION, 0))
 

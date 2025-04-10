@@ -153,10 +153,10 @@ def get_feature(image, mask):
 
     mask_array = cv2.imread(mask, 0)
     image = sitk.ReadImage(image)
-    image_arrary = sitk.GetArrayFromImage(image)[0, :, :]
+    image_arrary = sitk.GetArrayFromImage(image)[0, :, :] # 转换为numpy数组并取第一层
     # 映射到CT获得特征
     image_ROI = np.zeros(shape=image_arrary.shape)
-    index = np.nonzero(mask_array)
+    index = np.nonzero(mask_array) # 获取掩码中非零点的索引
     if not index[0].any():
         # c_features['no'] = True
         return None
@@ -184,7 +184,7 @@ def main(pid):
     person_id = pid
     global c_features
     c_features = {}
-    for i in range(len(features_list)):
+    for i in range(len(features_list)):  # 创建中英文对照特征字典
         c_features[features_list[i]] = [column_all_c[i]]
 
     get_feature(f'tmp/ct/{pid}.dcm', f'tmp/mask/{pid}_mask.png')

@@ -40,7 +40,7 @@ def after_request(response):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-
+# 网站根路径的访问处理。当用户访问 http://127.0.0.1:5003/ 时重定向到指定页面
 @app.route('/')
 def hello_world():
     return redirect(url_for('static', filename='./index.html'))
@@ -50,14 +50,14 @@ def hello_world():
 def upload_file():
     file = request.files['file']
     print(datetime.datetime.now(), file.filename)
-    if file and allowed_file(file.filename):
+    if file and allowed_file(file.filename): # 检查文件存在且格式正确
         # src_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         src_path = os.path.join('D:\CTAI\CTAI_flask\IMG', file.filename)
         file.save(src_path)
-        shutil.copy(src_path, './tmp/ct')
+        shutil.copy(src_path, './tmp/ct') # 复制到tmp目录下用于后续图像处理
         image_path = os.path.join('./tmp/ct', file.filename)
         # print(image_path)
-        pid, image_info = core.main.c_main(image_path, current_app.model)
+        pid, image_info = core.main.c_main(image_path, current_app.model)  # 图像处理核心逻辑
         return jsonify({'status': 1,
                         'image_url': 'http://127.0.0.1:5003/tmp/image/' + pid,
                         'draw_url': 'http://127.0.0.1:5003/tmp/draw/' + pid,
@@ -74,6 +74,7 @@ def download_file():
 
 
 # show photo
+# 静态文件服务接口，专门用于向前端提供图片资源
 @app.route('/tmp/<path:file>', methods=['GET'])
 def show_photo(file):
     # print(file)
